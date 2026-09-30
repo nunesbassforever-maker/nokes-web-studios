@@ -1,55 +1,33 @@
-# NOKES Web Studios
-
-Projeto de website premium para a empresa Nokes Web Studios, com identidade dark, foco em conversão e estrutura pronta para crescer.
-
-## Stack
-
-- Next.js 14
-- TypeScript
-- Tailwind CSS
-- Supabase
-- Framer Motion
-
-## Como rodar localmente
-
-1. Clone o repositório.
-2. Crie um arquivo `.env.local` a partir do `.env.example`.
-3. Preencha as variáveis do Supabase e WhatsApp.
-4. Instale as dependências:
-
-```bash
-npm install
-```
-
-5. Rode o projeto:
-
-```bash
-npm run dev
-```
-
-## Variáveis de ambiente
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_ADMIN_EMAIL=nunes.bass.forever@gmail.com
-NEXT_PUBLIC_WHATSAPP_NUMBER=
-```
-
-## Supabase
-
-Para produção, configure a tabela `profiles`, `user_roles`, `projects`, `contact_messages` e aplique RLS.
-
-## Usuário administrador inicial
-
-- nunes.bass.forever@gmail.com
-
-## Observação
-
-Algumas telas foram preparadas com dados de demonstração para apresentar a estrutura do produto. Em produção, substitua por dados do Supabase e implemente autenticação real.
-
-## Deploy
-
-A aplicação está pronta para deploy em Vercel com variáveis de ambiente configuradas.
-
+{
+  "name": "nokes-web-studios",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.45.4",
+    "framer-motion": "^10.16.16",
+    "lucide-react": "^0.468.0",
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.10",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.15",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.7.2"
+  }
+}

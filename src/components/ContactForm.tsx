@@ -1,44 +1,17 @@
-import Link from 'next/link'
-import { Instagram, Linkedin, Github } from 'lucide-react'
+'use client'
 
-export function Footer() {
-  const year = new Date().getFullYear()
+import { useState } from 'react'
+import { supabase, WHATSAPP_URL } from '@/lib/config'
 
-  return (
-    <footer className="border-t border-white/10 bg-black text-white">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-4 lg:px-8">
-        <div className="lg:col-span-2">
-          <p className="font-display text-4xl font-black tracking-tight">NOKES</p>
-          <p className="mt-4 text-xs uppercase tracking-[0.22em] text-gray-300">IDEIAS QUE VIRAM PRESENÇA.</p>
-        </div>
-
-        <div>
-          <p className="mb-4 text-xs uppercase tracking-[0.2em] text-gray-500">Links</p>
-          <ul className="space-y-3 text-sm text-gray-300">
-            <li><Link href="/">Início</Link></li>
-            <li><Link href="/#sobre">Sobre</Link></li>
-            <li><Link href="/#servicos">Serviços</Link></li>
-            <li><Link href="/#portfolio">Portfólio</Link></li>
-            <li><Link href="/#contato">Contato</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <p className="mb-4 text-xs uppercase tracking-[0.2em] text-gray-500">Redes</p>
-          <div className="flex gap-4 text-gray-300">
-            <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noreferrer"><Instagram className="h-5 w-5" /></a>
-            <a href="https://linkedin.com" aria-label="LinkedIn" target="_blank" rel="noreferrer"><Linkedin className="h-5 w-5" /></a>
-            <a href="https://github.com" aria-label="GitHub" target="_blank" rel="noreferrer"><Github className="h-5 w-5" /></a>
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 text-xs text-gray-500 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <p>© {year} Nokes Web Studios. Todos os direitos reservados.</p>
-          <p>SEU PRÓXIMO PASSO COMEÇA ONLINE.</p>
-        </div>
-      </div>
-    </footer>
-  )
+export function ContactForm() {
+  const [form, setForm] = useState({ name: '', email: '', company: '', whatsapp: '', projectType: '', message: '' })
+  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const update = (key: keyof typeof form, value: string) => setForm((current) => ({ ...current, [key]: value }))
+  async function submit(event: React.FormEvent) {
+    event.preventDefault(); setState('sending')
+    const { error } = await supabase.from('contact_messages').insert({ name: form.name, email: form.email, company: form.company || null, whatsapp: form.whatsapp || null, project_type: form.projectType || null, message: form.message })
+    setState(error ? 'error' : 'sent')
+    if (!error) setForm({ name: '', email: '', company: '', whatsapp: '', projectType: '', message: '' })
+  }
+  return <section id="contato" className="px-4 py-24 sm:px-6 lg:px-8"><div className="mx-auto max-w-6xl rounded-2xl border border-white/10 bg-white/[0.02] p-6 md:p-10"><div className="mb-10 text-center"><p className="text-xs uppercase tracking-[0.24em] text-cyan-400">CONTATO</p><h2 className="mt-4 text-4xl font-black md:text-5xl">VAMOS CONSTRUIR ALGO?</h2></div><div className="grid gap-10 lg:grid-cols-[1fr_1.4fr]"><div className="space-y-5"><p className="text-xl font-semibold">Sua ideia merece uma presença que funciona.</p><p className="text-gray-300">Conte o que você precisa. A Nokes responde com clareza e próximo passo.</p><a href={`${WHATSAPP_URL}?text=Ol%C3%A1%20Nokes%2C%20quero%20falar%20sobre%20um%20projeto.`} target="_blank" rel="noreferrer" className="inline-flex rounded-md border border-cyan-400 px-5 py-3 text-sm font-semibold text-cyan-300 hover:bg-cyan-400 hover:text-black">FALAR PELO WHATSAPP</a></div><form onSubmit={submit} className="grid gap-4 md:grid-cols-2"><input aria-label="Nome" required value={form.name} onChange={(e) => update('name', e.target.value)} placeholder="Nome" className="rounded-md border border-white/10 bg-black/40 px-4 py-3" /><input aria-label="Email" required type="email" value={form.email} onChange={(e) => update('email', e.target.value)} placeholder="Email" className="rounded-md border border-white/10 bg-black/40 px-4 py-3" /><input aria-label="Empresa" value={form.company} onChange={(e) => update('company', e.target.value)} placeholder="Empresa" className="rounded-md border border-white/10 bg-black/40 px-4 py-3" /><input aria-label="WhatsApp" value={form.whatsapp} onChange={(e) => update('whatsapp', e.target.value)} placeholder="WhatsApp" className="rounded-md border border-white/10 bg-black/40 px-4 py-3" /><select aria-label="Tipo de projeto" value={form.projectType} onChange={(e) => update('projectType', e.target.value)} className="rounded-md border border-white/10 bg-black/40 px-4 py-3 md:col-span-2"><option value="">Tipo de projeto</option><option>Site institucional</option><option>Landing page</option><option>Portfólio</option><option>E-commerce</option></select><textarea aria-label="Mensagem" required rows={5} value={form.message} onChange={(e) => update('message', e.target.value)} placeholder="Mensagem" className="rounded-md border border-white/10 bg-black/40 px-4 py-3 md:col-span-2" /><button disabled={state === 'sending'} className="rounded-md bg-cyan-400 px-6 py-3 font-semibold text-black disabled:opacity-60 md:col-span-2">{state === 'sending' ? 'ENVIANDO...' : 'ENVIAR PROJETO'}</button>{state === 'sent' && <p className="text-sm text-emerald-400 md:col-span-2">Mensagem enviada com sucesso.</p>}{state === 'error' && <p className="text-sm text-red-400 md:col-span-2">Não foi possível enviar. Verifique o Supabase.</p>}</form></div></div></section>
 }
