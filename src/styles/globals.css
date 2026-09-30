@@ -1,0 +1,55 @@
+import type { Metadata } from 'next'
+import { Inter, Manrope } from 'next/font/google'
+import '@/styles/globals.css'
+import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer'
+
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+  preload: true,
+})
+
+const manrope = Manrope({
+  variable: '--font-manrope',
+  subsets: ['latin'],
+  preload: true,
+})
+
+export const metadata: Metadata = {
+  title: 'NOKES Web Studios | Sites e Experiências Digitais',
+  description: 'Nokes Web Studios — criação de sites profissionais, experiências digitais e presença online para empresas.',
+  keywords: ['web design', 'desenvolvimento web', 'sites responsivos', 'presença digital', 'landing pages'],
+  applicationName: 'NOKES Web Studios',
+  openGraph: {
+    title: 'NOKES Web Studios | Sites e Experiências Digitais',
+    description: 'Criação de sites profissionais e experiências digitais para empresas.',
+    url: 'https://nokes.com.br',
+    siteName: 'NOKES Web Studios',
+    type: 'website',
+    images: [{ url: '/og-image.svg', width: 1200, height: 630, alt: 'NOKES Web Studios' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'NOKES Web Studios',
+    description: 'Criação de sites profissionais e experiências digitais para empresas.',
+    images: ['/og-image.svg'],
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="pt-BR" className={`${inter.variable} ${manrope.variable}`}>
+      <body className="bg-black text-white antialiased">
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
+  )
+}
